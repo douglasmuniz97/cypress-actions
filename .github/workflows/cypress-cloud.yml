@@ -10,6 +10,9 @@ on:
 jobs:
   cypress-e2e-electron:
     runs-on:  ubuntu-latest
+    container:
+      image:  cypress/browsers:node-20.18.0-chrome-130.0.6723.69-1-ff-131.0.3
+      options:  --user 1001
     steps:
       -  name: Get code
          uses: actions/checkout@v5.0.0
@@ -21,6 +24,54 @@ jobs:
            browser:  electron
            record:  true
            group:  UI Electron
+           spec:  ${{  github.event.inputs.spec  }}
+         env:
+           CYPRESS_RECORD_KEY:  31ae8548-cf44-4361-88ef-2c52bb6f4dd1
+           GITHUB_TOKEN:  ${{  secrets.GITHUB_TOKEN  }}
+
+      -  name:  Run E2E tests
+         run:  ${{  github.event.inputs.cli  }}
+  cypress-e2e-chrome:
+    needs:  cypress-e2e-electron
+    runs-on:  ubuntu-latest
+    container:
+      image:  cypress/browsers:node-20.18.0-chrome-130.0.6723.69-1-ff-131.0.3
+      options:  --user 1001
+    steps:
+      -  name: Get code
+         uses: actions/checkout@v5.0.0
+
+      -  name:  Cypress run
+         uses: cypress-io/github-action@v6.5.0
+         with:
+           install-command:  yarn install
+           browser:  chrome
+           record:  true
+           group:  UI Chrome
+           spec:  ${{  github.event.inputs.spec  }}
+         env:
+           CYPRESS_RECORD_KEY:  31ae8548-cf44-4361-88ef-2c52bb6f4dd1
+           GITHUB_TOKEN:  ${{  secrets.GITHUB_TOKEN  }}
+
+      -  name:  Run E2E tests
+         run:  ${{  github.event.inputs.cli  }}
+  cypress-e2e-firefox:
+    needs:  cypress-e2e-electron
+    runs-on:  ubuntu-latest
+    container:
+      image:  cypress/browsers:node-20.18.0-chrome-130.0.6723.69-1-ff-131.0.3
+      options:  --user 1001
+    steps:
+      -  name: Get code
+         uses: actions/checkout@v5.0.0
+
+      -  name:  Cypress run
+         uses: cypress-io/github-action@v6.5.0
+         with:
+           install-command:  yarn install
+           browser:  firefox
+           record:  true
+           group:  UI Firefox
            spec:  ${{  github.event.inputs.spec  }}
          env:
            CYPRESS_RECORD_KEY:  31ae8548-cf44-4361-88ef-2c52bb6f4dd1
