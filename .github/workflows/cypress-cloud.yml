@@ -49,6 +49,7 @@ jobs:
            record:  true
            group:  UI Chrome
            spec:  ${{  github.event.inputs.spec  }}
+           ci-build-id: ${{ github.run_id }}
          env:
            CYPRESS_RECORD_KEY:  31ae8548-cf44-4361-88ef-2c52bb6f4dd1
            GITHUB_TOKEN:  ${{  secrets.GITHUB_TOKEN  }}
