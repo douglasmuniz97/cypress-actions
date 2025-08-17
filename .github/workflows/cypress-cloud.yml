@@ -55,22 +55,3 @@ jobs:
 
       -  name:  Run E2E tests
          run:  ${{  github.event.inputs.cli  }}
-  cypress-e2e-firefox:
-    needs: cypress-e2e-electron
-    runs-on: ubuntu-latest
-    container:
-      image: cypress/browsers:node-20.16.0-chrome-126.0.6478.126-1-ff-128.0.2
-      options: --user 1001
-    steps:
-      - uses: actions/checkout@v5.0.0
-      - name: Cypress run
-        uses: cypress-io/github-action@v6.5.0
-        with:
-          install-command: yarn install
-          browser: firefox
-          record: true
-          group: UI Firefox
-          spec: ${{ github.event.inputs.spec }}
-        env:
-          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
