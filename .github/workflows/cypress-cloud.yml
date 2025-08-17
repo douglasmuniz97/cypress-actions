@@ -59,8 +59,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5.0.0
-      - name: Install deps
-        run: sudo apt-get update && sudo apt-get install -y firefox
+      - name: Install Firefox
+        run: |
+          sudo add-apt-repository -y ppa:mozillateam/ppa
+          sudo apt-get update
+          sudo apt-get install -y firefox
       - name: Cypress run
         uses: cypress-io/github-action@v6.5.0
         with:
@@ -69,6 +72,6 @@ jobs:
           record: true
           group: UI Firefox
           spec: ${{ github.event.inputs.spec }}
-    env:
-        CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        env:
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
